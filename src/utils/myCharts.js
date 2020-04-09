@@ -13,8 +13,38 @@ const install = function (Vue) {
             this.chart = echarts.init(document.getElementById(id))
             this.chart.clear()
             const optionData = {
+              grid: {
+                left: '3%',
+                right: '3%',
+                width: '94%',
+                show: true,
+                tooltip: {
+                  show: true,
+                  trigger: 'axis',
+                  axisPointer: {
+                        type: 'line'
+                      }
+                },
+                // backgroundColor: ['#d0d885', '#d0d833'],
+                // backgroundColor: 'green',
+                borderColor: 'green',
+                borderWidth: 2,
+                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                shadowBlur: 10,
+                containLabel: true
+              },
+              tooltip: {
+                // show: true,
+                // trigger: 'axis',
+                // axisPointer: {
+                //   type: 'line'
+                // }
+              },
               xAxis: {
                 type: 'category',
+                axisPointer: {
+                  z: 100
+              },
                 data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
               },
               yAxis: {
@@ -31,6 +61,13 @@ const install = function (Vue) {
           pie1: function (id) {
             this.chart = echarts.init(document.getElementById(id))
             this.chart.clear()
+            let data = [
+                  {value: 335, name: '直接访问', selected: true},
+                  {value: 310, name: '邮件营销'},
+                  {value: 234, name: '联盟广告'},
+                  {value: 135, name: '视频广告'},
+                  {value: 1548, name: '搜索引擎'}
+              ]
             const optionData = {
               title: {
                 text: '某站点用户访问来源',
@@ -43,6 +80,7 @@ const install = function (Vue) {
                   color: 'green'
               }
             },
+
             tooltip: {
                 trigger: 'item',
                 formatter: '{a} <br/>{b} : {c} ({d}%)'
@@ -53,18 +91,43 @@ const install = function (Vue) {
               itemHeight: 10,
               orient: 'vertical',
               left: 'left',
-              data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎'],
-              textStyle: {
-                // borderWidth: 2,
-                // shadowBlur: 2,
-                // shadowColor: 'yellow',
-                // color: 'red',
-                // borderColor: 'green'
-              },
+              data: data,
               formatter: function (name) {
-                return echarts.format.truncateText(name, 80, '14px Microsoft Yahei', '…')
+                var total = 0
+                var target
+                for (var i = 0, l = data.length; i < l; i++) {
+                  total += data[i].value
+                  if (data[i].name === name) {
+                    target = data[i].value
+                  }
+                }
+                var arr = [
+                  '{names|' + name + '}',
+                  '{pecents|' + ((target / total) * 100).toFixed(2) + '%}'
+                ]
+                return arr.join('-')
               },
-                tooltip: {
+              selector: true,
+              selectorLabel: {
+                fontWeight: 700,
+                verticalAlign: 'middle',
+                backgroundColor: 'red'
+              },
+              textStyle: {
+                fontSize: 12,
+                show: false,
+                rich: {
+                  // names: {
+                  //   fontSize: 12,
+                  //   verticalAlign: 'top'
+                  // },
+                  // pecents: {
+                  //   fontSize: 12
+                  // }
+                },
+                color: ['#4A90E2', '#2DCCA9', '#9013FE', '#FF5D5D', '#FFBE53', '#3E3F58', '#4f0202', '#ff7200']
+              },
+              tooltip: {
                   show: true
               }
             },
@@ -72,14 +135,16 @@ const install = function (Vue) {
                 {
                     name: '访问来源',
                     type: 'pie',
+                    roseType: 'radius',
                     radius: '55%',
                     center: ['50%', '60%'],
+                    color: ['#4A90E2', '#2DCCA9', '#9013FE', '#FF5D5D', '#FFBE53', '#3E3F58', '#4f0202', '#ff7200'],
                     data: [
-                        {value: 335, name: '直接访问', selected: true},
+                        {value: 335, name: '直接访问'},
                         {value: 310, name: '邮件营销'},
                         {value: 234, name: '联盟广告'},
                         {value: 135, name: '视频广告'},
-                        {value: 1548, name: '搜索引擎'}
+                        {value: 448, name: '搜索引擎'}
                     ],
                     emphasis: {
                         itemStyle: {
