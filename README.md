@@ -1,4 +1,4 @@
-# lotvue
+# vuecharts
 
 > A Vue.js project
 
